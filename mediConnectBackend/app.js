@@ -16,7 +16,7 @@ mongoose.connect(process.env.DB_URL)
     .then((res) => {
         app.use(cors(  
         {
-            origin:["https://knowyourdoctor-frontend.onrender.com", "http://localhost:5173"],
+            origin:["http://localhost:5173"],
             credentials:true
         } 
         ));
