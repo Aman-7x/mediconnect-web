@@ -152,7 +152,8 @@ export const cancelAppointment = async (req, res) => {
   try {
     const { id } = req.params;
     const { cancelReason } = req.body;
-
+    // console.log("Cancel : ",cancelReason);
+    
     if (!cancelReason || cancelReason.trim() === "") {
       return res.status(400).json({ error: "Cancel reason is required" });
     }
@@ -389,8 +390,8 @@ export const deleteAppointment = async (req, res) => {
       return res.status(403).json({ error: "Unauthorized patient" });
     }
 
-    // Optional: prevent deletion if already completed or cancelled
-    if (["completed", "cancelled"].includes(appointment.status)) {
+    // Optional: prevent deletion if already completed or pending
+    if (["completed", "pending"].includes(appointment.status)) {
       return res.status(400).json({ error: `Cannot delete an appointment that is ${appointment.status}` });
     }
 

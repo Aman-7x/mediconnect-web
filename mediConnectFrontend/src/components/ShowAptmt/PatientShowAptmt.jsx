@@ -142,6 +142,7 @@ function PatientShowAptmt() {
                   <p><b>Mobile:</b> {apt.mobile}</p>
                   <p><b>Ap.Day:</b> {apt.apmtDay}</p>
                   <p><b>Ap.Reason:</b> {apt.meetingReason}</p>
+                 {apt.cancelReason &&  <p><b>Ap.Can.Reason:</b> {apt.cancelReason}</p>}
                 </div>
 
                 <div className="btn-group">

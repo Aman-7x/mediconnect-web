@@ -1,7 +1,7 @@
 import { createAppointment,updateAppointment,cancelAppointment,viewAppointments,confirmAppointment,completeAppointment,deleteAppointment ,} from "../controller/appointment.controller.js";
 import {auth} from "../middleware/auth.js"
 import {body }from "express-validator";
-import express from "express";
+import express from "express"; 
 import multer from "multer";
 const upload = multer({dest:"public/doctorProfile"})
 const router = express.Router();

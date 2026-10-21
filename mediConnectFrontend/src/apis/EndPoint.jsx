@@ -30,6 +30,8 @@ const connect = {
      cancel_aptmt:BASE_URL+"/aptmt/cancel/",
      complete_aptmt:BASE_URL+"/aptmt/complete/",
      updateAptmt:BASE_URL+"/aptmt/update/",
+     reject_aptmt:BASE_URL+"/aptmt/cancel/",
+     delete_aptmt:BASE_URL+"/aptmt/delete/",
      
 }
 export default connect;

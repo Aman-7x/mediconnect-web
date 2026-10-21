@@ -10,15 +10,15 @@ import postRoute from "./router/post.router.js"
 import appintmentRouter from "./router/appointment.router.js";
 import cookieParser from "cookie-parser";   
 
-const app = express();
+const app = express();  
 
 mongoose.connect(process.env.DB_URL)
-    .then(() => {
+    .then((res) => {
         app.use(cors(  
         {
-            origin:["https://knowyourdoctor-frontend.onrender.com", "http://localhost:3001"],
+            origin:["https://knowyourdoctor-frontend.onrender.com", "http://localhost:5173"],
             credentials:true
-        }
+        } 
         ));
         app.use(bodyparser.json());
         app.use(bodyparser.urlencoded({ extended: true }));
@@ -28,8 +28,12 @@ mongoose.connect(process.env.DB_URL)
         app.use("/patient", patientRoute);
         app.use("/post", postRoute);
         app.use("/aptmt", appintmentRouter);
+
         app.listen(process.env.PORT, () => {
             console.log("server started at " + process.env.PORT);
+            console.log('Database Connected Successfully');
+            console.log('Host Name : ',res.connection.host);
+            
         })
     })
     .catch((err) => {

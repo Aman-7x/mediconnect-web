@@ -18,14 +18,14 @@ function Footer() {
 
                 <div className="second-section">
                     <h4>Contact Us</h4>
-                    <p><i className="bi bi-telephone"></i> 123-456</p>
-                    <p><i className="bi bi-envelope"></i> support.mediconnectteam@gmail.com</p>
+                    <p><i className="bi bi-telephone"></i>9111-440-529</p>
+                    <p><i className="bi bi-envelope"></i> mediconnect.team.support@gmail.com</p>
                     <p><i className="bi bi-geo-alt"></i> Dewas</p>
                 </div>
 
                 <div className="third-section">
                     <h4>Copy-right</h4>
-                    <p><i className="bi bi-c-circle"></i>support.mediconnectteam@gmail.com</p>
+                    <p><i className="bi bi-c-circle"></i>mediconnect.team.support@gmail.com</p>
                 </div>
             </div>
         </footer>

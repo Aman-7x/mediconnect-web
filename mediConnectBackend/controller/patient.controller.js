@@ -143,7 +143,7 @@ const baseURL ='http://localhost:3000';
 
     export const  verifyAccount = async (request, response, next) => {
         try {
-            let { email } = request.body;
+            let { email } = request.query;
             // console.log("verify : ", email);
             let result = await User.updateOne({ email }, { $set: { "patientInfo.isVerified": true } });
             console.log("MongoDB Update Result:", result);
@@ -153,50 +153,141 @@ const baseURL ='http://localhost:3000';
             if (result.modifiedCount === 0)
                 return response.status(200).json({ message: "Already verified" });
 
-            return response.status(201).json({ message: "verification completed" })
-        }
+response.send(`
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Email Verified - MediConnect</title>
+                <style>
+                    body {
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        background-color: #f4f7f6;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                    }
+                    .card {
+                        background: white;
+                        padding: 40px;
+                        border-radius: 12px;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                        text-align: center;
+                        max-width: 400px;
+                        width: 90%;
+                    }
+                    .icon {
+                        font-size: 50px;
+                        color: #27ae60;
+                        margin-bottom: 15px;
+                    }
+                    h2 { color: #2c3e50; margin-bottom: 10px; }
+                    p { color: #7f8c8d; line-height: 1.5; }
+                    .btn {
+                        display: inline-block;
+                        margin-top: 20px;
+                        padding: 12px 24px;
+                        background-color: #0056b3;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 6px;
+                        font-weight: bold;
+                        transition: background 0.3s;
+                    }
+                    .btn:hover { background-color: #004085; }
+                </style>
+                <meta http-equiv="refresh" content="5;url=http://localhost:3000/login" />
+            </head>
+            <body>
+                <div class="card">
+                    <div class="icon">✓</div>
+                    <h2>Email Verified!</h2>
+                    <p>Your email address has been successfully verified. You can now log in to your MediConnect account.</p>
+                    <a href="http://localhost:5173/signin" class="btn">Go to Login</a>
+                    <p style="font-size: 12px; margin-top: 15px; color: #aaa;">
+                        Redirecting to login in <span id="timer">5</span> seconds...
+                    </p>
+                </div>
+
+                <script>
+                    let timeLeft = 5;
+                    const timerSpan = document.getElementById('timer');
+                    setInterval(() => {
+                        timeLeft--;
+                        if(timeLeft >= 0) timerSpan.textContent = timeLeft;
+                    }, 1000);
+                </script>
+            </body>
+            </html>
+        `);        }
         catch (err) {
             return response.status(500).json({ error: "Internal Server Error" });
         }
 
     }
 
-    const sendEmail = (name, email) => {
-        return new Promise((resolve, reject) => {
-            let transporter = nodemailer.createTransport({
-                service: "gmail",
-                auth: {
-                    user: process.env.EMAIL,
-                    pass: process.env.EMAIL_PASSWORD
-                }
-            })
-
-            let mailOption = {
-                from: process.env.EMAIL,
-                to: email,
-                subject: "Accounte Verification",
-                html: `<h3>Dear ${name} </h3>
-                <p>Welcome to Medi Connect. Please verify its you if not you dont accept the cookies.</p>
-                <form method = "post" action = "${baseURL}/patient/verification">
-                <input type = "hidden" name = "email" value =" ${email}" />
-                <button type="submit" style="background-color: blue; color:white; width:200px; border: none; border: 1px solid gray; border-radius:10px;">Verify</button>
-                </form>
-                <p>
-                <h6>ThankYou</h6>
-                Medi Connect Team .
-                </p> 
-                `
-            };
-            transporter.sendMail(mailOption, function (error, info) {
-                if (error) {
-                    reject(error);
-                }
-                else {
-                    resolve();
-                }
-            });
+const sendEmail = (name, email) => {
+    return new Promise((resolve, reject) => {
+        let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            }
         });
-    }
+
+        // Encode email to safely handle special characters like '+' or '.'
+        const encodedEmail = encodeURIComponent(email);
+        const verificationUrl = `${baseURL}/patient/verification?email=${encodedEmail}`;
+
+        let mailOption = {
+            from: `"MediConnect Support" <${process.env.EMAIL}>`,
+            to: email,
+            subject: "Account Verification - MediConnect",
+            // Add plain text fallback (greatly improves email deliverability scores)
+            text: `Dear ${name},\n\nWelcome to MediConnect. Please click the following link to verify your email:\n${verificationUrl}\n\nThank you,\nMediConnect Team`,
+            html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                    <h3>Dear ${name},</h3>
+                    <p>Welcome to MediConnect. Please click the button below to verify your account:</p>
+                    
+                    <!-- Styled Anchor Tag (Safe for all Email Clients) -->
+                    <div style="margin: 20px 0;">
+                        <a href="${verificationUrl}" 
+                           target="_blank" 
+                           style="background-color: #0056b3; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+                            Verify Email
+                        </a>
+                    </div>
+
+                    <p style="font-size: 12px; color: #777;">
+                        If the button above does not work, copy and paste this link into your browser:<br/>
+                        <a href="${verificationUrl}">${verificationUrl}</a>
+                    </p>
+
+                    <hr style="border: none; border-top: 1px solid #eee; margin-top: 20px;" />
+                    <p style="font-size: 13px; color: #555;">
+                        <strong>Thank You,</strong><br/>
+                        MediConnect Team
+                    </p>
+                </div>
+            `
+        };
+
+        transporter.sendMail(mailOption, function (error, info) {
+            if (error) {
+                console.error("Nodemailer error:", error);
+                reject(error);
+            } else {
+                console.log("Email sent successfully:", info.response);
+                resolve(info);
+            }
+        });
+    });
+};
 
     const generateToken = (email, userid, role) => {
         let payload = ({ "patientId": userid, "emailId": email, "role": role });

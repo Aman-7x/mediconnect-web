@@ -114,7 +114,6 @@ function Signup() {
     }
 
     return <>
-        <ToastContainer />
         <div className="container">
             <div className="back-arrow  ">
                 <Link to='/'><i className="bi bi-arrow-left"></i></Link>
@@ -168,6 +167,7 @@ function Signup() {
                 </form>
             </div>
         </div>
+        <ToastContainer />
     </>
 }
 

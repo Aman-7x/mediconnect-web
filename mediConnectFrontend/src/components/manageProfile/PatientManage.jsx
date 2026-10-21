@@ -4,7 +4,7 @@ import axios from "axios";
 import EndPoint from "../../apis/EndPoint";
 import Navbar from "../Navbar/Navbar";
 import { toast, ToastContainer } from "react-toastify";
-
+import defaultPic from "../../../public/assets/default.png";
 function PatientManage() {
   const [patient, setPatient] = useState({});
   const [isEditing, setIsEditing] = useState(false);
@@ -99,7 +99,7 @@ function PatientManage() {
       toast.success("Profile photo removed");
       setShowForm(false);
       loadPatient();
-    } catch (error) {
+      } catch (error) {
       console.log("Delete error:", error);
       toast.error("Failed to delete image");
     }
@@ -116,9 +116,9 @@ function PatientManage() {
         <div className="profile-image" onClick={() => setShowForm(true)}>
           <img
             src={
-              patient?.profile?.imageName && patient.profile.imageName.trim() !== ""
-                ? patient.profile.imageName
-                : "./assets/default.png"
+              patient?.profile?.imageName &&  patient.profile.imageName.split("/")[4] != "undefined"
+                ?  patient?.profile?.imageName
+                : defaultPic
             }
             alt="Patient"
           />
@@ -183,16 +183,19 @@ function PatientManage() {
             <div className="modal-preview">
               <img
                 src={
-                  patient?.profile?.imageName && patient.profile.imageName.trim() !== ""
+                  patient?.profile?.imageName &&  patient.profile.imageName.split("/")[4] != "undefined"
                     ? patient.profile.imageName
-                    : "./assets/default.png"
+                    : defaultPic
                 }
                 alt="Profile Preview"
               />
             </div>
 
             <div className="modal-buttons">
-              <button onClick={handleProfileDelete} className="delete-btn">Delete</button>
+              {console.log(patient?.profile?.imageName )}
+        {   patient?.profile?.imageName &&  patient.profile.imageName.split("/")[4] == "undefined"
+                    ? ""
+                    : <button onClick={handleProfileDelete} className="delete-btn">Delete</button>}
               <label htmlFor="update-profile" className="update-btn">Update</label>
               <input type="file" id="update-profile" style={{ display: "none" }} onChange={handleProfileUpdate} />
             </div>

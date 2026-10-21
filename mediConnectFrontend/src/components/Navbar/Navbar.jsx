@@ -61,8 +61,10 @@ function Navbar() {
   return (
     <nav className="navbar"> 
       <div className="logo">
+        <Link to={"/home"}>
         <img src="../../assets/mediconnectLogo.jpg" alt="Logo" />
-        {/* <img src={image} alt="Logo" />  */}
+        </Link>
+
       </div>
 
       {/* Center: Search (only if logged in) */}

@@ -494,7 +494,7 @@ const sendEmail = (name, email) => {
             </form>
             <p>
             <h6>Thank You</h6>
-            Know your Doctor .
+            MediConnect :) .
             </p> 
             `
         };
