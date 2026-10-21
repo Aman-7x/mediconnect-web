@@ -1,4 +1,6 @@
 export const BASE_URL = import.meta.env.VITE_API_URL 
+console.log(BASE_URL);
+
 // || "http://localhost:3000";
 const connect = {
      doc_List: BASE_URL + "/doctor/doctorList",

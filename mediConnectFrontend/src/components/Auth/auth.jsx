@@ -5,7 +5,7 @@ return !!sessionStorage.getItem("current-user");
 }
 
 const Auth = ({children}) => {
-    console.log("Auth exicuted")
+    // console.log("Auth exicuted")
     // console.log("childern ;" + {Children})
     return isUserExit() ? children : <Navigate to="/find"/>
 }
