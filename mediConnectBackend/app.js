@@ -16,7 +16,7 @@ mongoose.connect(process.env.DB_URL)
     .then((res) => {
         app.use(cors(  
         {
-            origin:["http://localhost:5173"],
+            origin:["https://mediconnect-self-eight.vercel.app","http://localhost:5173"],
             credentials:true
         } 
         ));
